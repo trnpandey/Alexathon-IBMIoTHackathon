@@ -276,7 +276,33 @@ const fifteen = (date,source,dest,no,clas,quota,callback) => {
 
 
 const handlers = {
-
+    'cheapestflight': function(){
+	    this.emit(':ask',"Hi, from where do you want to travel");
+    }
+    'Source_name': function(){
+	    this.attributes['test_source'] = this.event.request.intent.slots.source.value;
+	    this.emit(':ask',"where do you want to go");
+    }
+    'destination_name': function(){
+	    this.attributes['test_destination'] = this.event.request.intent.slots.dest.value;
+	    this.emit(':ask',"on what date you want to travel");
+    }
+    'date_of_travel': function(){
+	    var date=this.event.request.intent.slots.date.value;
+	    date=date.toString();
+            date=date.replace("-","");
+            date=date.replace("-","");
+	    this.attributes['test_date']= date;
+	    this.emit(':ask',"on which class you want to travel");
+    }
+    'class_of_travel':function(){
+	    this.attributes['test_class']=this.event.request.intent.slots.class.value;
+	    third(this.attributes['test_source'] ,  this.attributes['test_destination'], this.attributes['test_date'],this.attributes['test_class'],(err, res) => {
+			
+			this.emit(':tell', res);
+		});
+	    
+    }
     'enquiry': function(){
        
 		var source=this.event.request.intent.slots.source.value;
